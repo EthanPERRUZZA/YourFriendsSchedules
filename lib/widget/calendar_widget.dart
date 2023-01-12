@@ -13,6 +13,7 @@ class CalendarWidget extends StatelessWidget {
     return SfCalendar(
       view: CalendarView.day,
       dataSource: EventDataSource(events),
+      timeSlotViewSettings: TimeSlotViewSettings(timeFormat: 'HH:mm'),
       appointmentBuilder: appointmentBuilder, //the style of each event
       onTap: (details) {}, //To get more details on the event (onclick)
     );
