@@ -59,7 +59,7 @@ class MainPage extends StatelessWidget {
       ),
       body: CalendarWidget(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.blue,
         onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(builder: ((context) => EventEditingPage())),
         ),
