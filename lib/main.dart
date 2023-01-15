@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:provider/provider.dart';
-import 'package:your_friends_schedules/provider/event_provider.dart';
+import 'provider/event_provider.dart';
 import 'widget/calendar_widget.dart';
 import 'page/event_editing_page.dart';
+import 'page/calendar_manager_page.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+enum _MenuValues {
+  calendarsList,
 }
 
 class MyApp extends StatelessWidget {
@@ -56,7 +61,7 @@ class MainPage extends StatelessWidget {
         // the App.build method, and use it to set our appbar title.
         title: const Text(MyApp.title),
         centerTitle: true,
-        actions: buildMenu(),
+        actions: buildMenu(context),
       ),
       body: CalendarWidget(),
       floatingActionButton: FloatingActionButton(
@@ -69,11 +74,22 @@ class MainPage extends StatelessWidget {
     );
   }
 
-  List<Widget> buildMenu() => [
-        PopupMenuButton(
+  List<Widget> buildMenu(BuildContext context) => [
+        PopupMenuButton<_MenuValues>(
           itemBuilder: (BuildContext context) => [
-            const PopupMenuItem(child: Text('Other Calendars')),
+            const PopupMenuItem(
+              value: _MenuValues.calendarsList,
+              child: Text('Other Calendars'),
+            )
           ],
+          onSelected: (value) {
+            switch (value) {
+              case _MenuValues.calendarsList:
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const CalendarManagerPage()));
+                break;
+            }
+          },
           icon: const Icon(Icons.more_vert),
         )
       ];
