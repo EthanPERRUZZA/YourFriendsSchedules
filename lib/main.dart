@@ -56,6 +56,7 @@ class MainPage extends StatelessWidget {
         // the App.build method, and use it to set our appbar title.
         title: const Text(MyApp.title),
         centerTitle: true,
+        actions: buildMenu(),
       ),
       body: CalendarWidget(),
       floatingActionButton: FloatingActionButton(
@@ -67,4 +68,13 @@ class MainPage extends StatelessWidget {
       ),
     );
   }
+
+  List<Widget> buildMenu() => [
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) => [
+            const PopupMenuItem(child: Text('Other Calendars')),
+          ],
+          icon: const Icon(Icons.more_vert),
+        )
+      ];
 }
