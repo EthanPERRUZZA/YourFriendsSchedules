@@ -15,9 +15,22 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addCalendar(Calendar calendar) {
+    _calendars.add(calendar);
+
+    notifyListeners();
+  }
+
   void editEvent(Event newEvent, Event oldEvent) {
     final index = _events.indexOf(oldEvent);
     _events[index] = newEvent;
+
+    notifyListeners();
+  }
+
+  void editCalendar(Calendar newCalendar, Calendar oldCalendar) {
+    final index = _calendars.indexOf(oldCalendar);
+    _calendars[index] = newCalendar;
 
     notifyListeners();
   }
