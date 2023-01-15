@@ -5,7 +5,12 @@ import '../utils.dart';
 import '../provider/event_provider.dart';
 
 class EventEditingPage extends StatefulWidget {
-  final Event? event = null;
+  final Event? event;
+
+  const EventEditingPage({
+    Key? key,
+    this.event,
+  }) : super(key: key);
 
   @override
   _EventEditingPageState createState() => _EventEditingPageState();
@@ -24,6 +29,12 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (widget.event == null) {
       fromDate = DateTime.now();
       toDate = DateTime.now().add(const Duration(hours: 2));
+    } else {
+      final event = widget.event!;
+
+      titleController.text = event.title;
+      fromDate = event.from;
+      toDate = event.to;
     }
   }
 
@@ -38,18 +49,18 @@ class _EventEditingPageState extends State<EventEditingPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
-        leading: CloseButton(),
+        leading: const CloseButton(),
         actions: buildEditingActions(),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               buildTitle(),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               buildDateTimePickers(),
             ],
           ),
@@ -70,8 +81,8 @@ class _EventEditingPageState extends State<EventEditingPage> {
 
   //Field to type the title of the event
   Widget buildTitle() => TextFormField(
-        style: TextStyle(fontSize: 24),
-        decoration: InputDecoration(
+        style: const TextStyle(fontSize: 24),
+        decoration: const InputDecoration(
           border: UnderlineInputBorder(),
           hintText: 'Add Title',
         ),
@@ -157,7 +168,15 @@ class _EventEditingPageState extends State<EventEditingPage> {
     if (date == null) return;
 
     //Then, display the new date
-    setState(() => toDate = date);
+    setState(() {
+      //If from date is after todate then we change the to date
+      if (date.isBefore(fromDate)) {
+        toDate = DateTime(
+            date.year, date.month, date.day + 1, date.hour, date.minute);
+      } else {
+        toDate = date;
+      }
+    });
   }
 
   Future<DateTime?> pickDateTime(
@@ -200,7 +219,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   }) =>
       ListTile(
         title: Text(text),
-        trailing: Icon(Icons.arrow_drop_down),
+        trailing: const Icon(Icons.arrow_drop_down),
         onTap: onClicked,
       );
 
@@ -211,7 +230,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(header, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(header, style: const TextStyle(fontWeight: FontWeight.bold)),
           child
         ],
       );
@@ -230,8 +249,14 @@ class _EventEditingPageState extends State<EventEditingPage> {
         isAllDay: false,
       );
 
+      final isEditing = widget.event != null;
       final provider = Provider.of<EventProvider>(context, listen: false);
-      provider.addEvent(event);
+
+      if (isEditing) {
+        provider.editEvent(event, widget.event!);
+      } else {
+        provider.addEvent(event);
+      }
 
       Navigator.of(context).pop();
     }

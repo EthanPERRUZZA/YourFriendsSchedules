@@ -61,7 +61,7 @@ class MainPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: ((context) => EventEditingPage())),
+          MaterialPageRoute(builder: ((context) => const EventEditingPage())),
         ),
         child: const Icon(Icons.add, color: Colors.white),
       ),

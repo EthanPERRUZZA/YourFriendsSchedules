@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../provider/event_provider.dart';
 import '../model/event_data_source.dart';
+import '../page/event_viewing_page.dart';
 
 class CalendarWidget extends StatelessWidget {
   @override
@@ -13,9 +14,18 @@ class CalendarWidget extends StatelessWidget {
     return SfCalendar(
       view: CalendarView.day,
       dataSource: EventDataSource(events),
-      timeSlotViewSettings: TimeSlotViewSettings(timeFormat: 'HH:mm'),
+      timeSlotViewSettings: const TimeSlotViewSettings(timeFormat: 'HH:mm'),
       appointmentBuilder: appointmentBuilder, //the style of each event
-      onTap: (details) {}, //To get more details on the event (onclick)
+      //To get more details on the event (onclick)
+      onTap: (details) {
+        if (details.appointments == null) return;
+
+        final event = details.appointments!.first;
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => EventViewingPage(event: event),
+        ));
+      },
     );
   }
 
@@ -31,12 +41,12 @@ class CalendarWidget extends StatelessWidget {
       decoration: BoxDecoration(
           color: event.backgroundColor.withOpacity(0.7),
           borderRadius: BorderRadius.circular(6)),
-      padding: EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(3.0),
       child: Text(
         event.title,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
