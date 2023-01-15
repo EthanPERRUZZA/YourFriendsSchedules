@@ -10,26 +10,39 @@ class CalendarsListWidget extends StatelessWidget {
     final calendars = Provider.of<EventProvider>(context).calendars;
 
     return Column(
-      children: BuildCalendarsList(calendars),
+      children: BuildCalendarsList(context, calendars),
     );
   }
 
-  List<Widget> BuildCalendarsList(List<Calendar> calendars) {
-    List<Widget> calendarsList = [];
+  List<Widget> BuildCalendarsList(
+      BuildContext context, List<Calendar> calendars) {
+    List<Widget> calendarsList = [
+      const SizedBox(height: 12),
+      const Text(
+        'Imported Calendars : ',
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+      ),
+    ];
     for (Calendar calendar in calendars) {
-      calendarsList.add(Row(
-        children: [
-          // Calendar color
-          // Expanded(child:)),
-          // Calendar Title
-          Expanded(
-            flex: 5,
-            child: Text(calendar.title),
-          ),
-          // Calendar delete button
-          // Expanded(child:)),
-        ],
-      ));
+      calendarsList.add(Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Theme.of(context).toggleableActiveColor),
+          padding: const EdgeInsets.all(15.0),
+          margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+          child: Row(
+            children: [
+              // Calendar color
+              // Expanded(child:)),
+              // Calendar Title
+              Expanded(
+                flex: 5,
+                child: Text(calendar.title),
+              ),
+              // Calendar delete button
+              // Expanded(child:)),
+            ],
+          )));
     }
     return calendarsList;
   }
