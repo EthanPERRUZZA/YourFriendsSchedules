@@ -5,6 +5,7 @@ import 'provider/event_provider.dart';
 import 'widget/calendar_widget.dart';
 import 'page/event_editing_page.dart';
 import 'page/calendar_manager_page.dart';
+import 'script/get_calendar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +13,7 @@ void main() {
 
 enum _MenuValues {
   calendarsList,
+  refresh,
 }
 
 class MyApp extends StatelessWidget {
@@ -80,13 +82,20 @@ class MainPage extends StatelessWidget {
             const PopupMenuItem(
               value: _MenuValues.calendarsList,
               child: Text('Other Calendars'),
-            )
+            ),
+            const PopupMenuItem(
+              value: _MenuValues.refresh,
+              child: Text('Refresh'),
+            ),
           ],
           onSelected: (value) {
             switch (value) {
               case _MenuValues.calendarsList:
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const CalendarManagerPage()));
+                break;
+              case _MenuValues.refresh:
+                GetCalendar.refreshCalendars(context);
                 break;
             }
           },

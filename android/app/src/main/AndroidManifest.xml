@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.your_friends_schedules">
+    <uses-permission android:name="android.permission.INTERNET" /> 
    <application
         android:label="your_friends_schedules"
         android:name="${applicationName}"
