@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:your_friends_schedules/script/save.dart';
 import 'provider/event_provider.dart';
 import 'widget/calendar_widget.dart';
 import 'page/event_editing_page.dart';
@@ -95,7 +96,8 @@ class MainPage extends StatelessWidget {
                     builder: (context) => const CalendarManagerPage()));
                 break;
               case _MenuValues.refresh:
-                GetCalendar.refreshCalendars(context);
+                GetCalendar.refreshCalendars(
+                    Provider.of<EventProvider>(context, listen: false));
                 break;
             }
           },

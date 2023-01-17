@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:your_friends_schedules/model/event.dart';
 import 'package:your_friends_schedules/model/calendar.dart';
+import 'package:your_friends_schedules/script/save.dart';
 
 class EventProvider extends ChangeNotifier {
   final List<Event> _events = [];
@@ -8,6 +9,10 @@ class EventProvider extends ChangeNotifier {
 
   List<Event> get events => _events;
   List<Calendar> get calendars => _calendars;
+
+  EventProvider() {
+    Save.loadICSCalendars(this);
+  }
 
   void addEvent(Event event) {
     _events.add(event);

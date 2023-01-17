@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:your_friends_schedules/script/save.dart';
 import '../model/calendar.dart';
 import '../utils.dart';
 import '../provider/event_provider.dart';
@@ -140,6 +141,9 @@ class _CalendarEditingPageState extends State<CalendarEditingPage> {
       }
 
       Navigator.of(context).pop();
+
+      // Save in the filestorage the new link
+      Save.saveICSCalendars(context);
     }
   }
 }

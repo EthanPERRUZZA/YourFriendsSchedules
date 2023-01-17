@@ -7,14 +7,13 @@ import 'package:your_friends_schedules/model/event.dart';
 import '../provider/event_provider.dart';
 
 class GetCalendar {
-  static refreshCalendars(BuildContext context) async {
-    final provider = Provider.of<EventProvider>(context, listen: false);
-    for (Calendar calendar in provider.calendars) {
-      fromInternetICS(context, calendar);
+  static refreshCalendars(EventProvider eventProvider) async {
+    for (Calendar calendar in eventProvider.calendars) {
+      fromInternetICS(eventProvider, calendar);
     }
   }
 
-  static fromInternetICS(BuildContext context, Calendar calendar) async {
+  static fromInternetICS(EventProvider eventProvider, Calendar calendar) async {
     //request to the internet
     final request = await HttpClient().getUrl(Uri.parse(calendar.link));
     final response = await request.close();
@@ -29,8 +28,6 @@ class GetCalendar {
 
     //parse of the response
     //And add each new event to the actual calendar display
-    final provider = Provider.of<EventProvider>(context, listen: false);
-
     //fields availiable
     String title = "";
     String description = "None";
@@ -39,7 +36,7 @@ class GetCalendar {
     for (String line in icsLines) {
       //if it is the end of an event, we add him
       if (line == 'END:VEVENT') {
-        provider.addEvent(
+        eventProvider.addEvent(
             Event(title: title, description: description, from: from, to: to));
         //Restoration of the fields
         title = "";
