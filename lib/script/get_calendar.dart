@@ -55,10 +55,10 @@ class GetCalendar {
             description = line.substring(index + 1);
             break;
           case 'DTSTART':
-            from = DateTime.parse(line.substring(index + 1));
+            from = DateTime.parse(line.substring(index + 1)).toLocal();
             break;
           case 'DTEND':
-            to = DateTime.parse(line.substring(index + 1));
+            to = DateTime.parse(line.substring(index + 1)).toLocal();
             break;
           case 'LOCATION':
             description += '\n\nLocation : ${line.substring(index + 1)}';
