@@ -45,4 +45,10 @@ class EventProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void deleteCalendar(Calendar calendar) {
+    _calendars.remove(calendar);
+
+    notifyListeners();
+  }
 }
