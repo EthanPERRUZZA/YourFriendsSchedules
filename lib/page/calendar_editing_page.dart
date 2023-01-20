@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/src/provider.dart';
 import 'package:your_friends_schedules/script/save.dart';
 import '../model/calendar.dart';
@@ -62,8 +63,8 @@ class _CalendarEditingPageState extends State<CalendarEditingPage> {
               buildTitle(),
               const SizedBox(height: 12),
               buildLink(),
-              //const SizedBox(height: 12),
-              //buildColorPicker(),
+              const SizedBox(height: 25),
+              buildColorPickerField(),
             ],
           ),
         ),
@@ -106,6 +107,74 @@ class _CalendarEditingPageState extends State<CalendarEditingPage> {
             link != null && link.isEmpty ? 'Link cannot be empty' : null,
         controller: linkController,
       );
+
+  Widget buildColorPickerField() => Row(
+        children: [
+          const Expanded(
+            flex: 2,
+            child: Text(
+              "Calendar Color:",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () => pickColor(context),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: backgroundColor,
+                ),
+                width: 50,
+                height: 50,
+              ),
+            ),
+          )
+        ],
+      );
+
+  void pickColor(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Text("Pick Your Color"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildColorPicker(),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('SELECT', style: TextStyle(fontSize: 20)),
+                ),
+              ],
+            ),
+          ));
+
+  Widget buildColorPicker() => BlockPicker(
+      pickerColor: backgroundColor,
+      availableColors: const [
+        Colors.red,
+        Colors.pink,
+        Colors.purple,
+        Colors.deepPurple,
+        Colors.indigo,
+        Colors.blue,
+        Colors.lightBlue,
+        Colors.cyan,
+        Colors.teal,
+        Colors.green,
+        Colors.lightGreen,
+        Colors.lime,
+        Colors.yellow,
+        Colors.amber,
+        Colors.orange,
+        Colors.deepOrange,
+        Colors.brown,
+        Colors.grey,
+        Colors.blueGrey,
+        Colors.black,
+      ],
+      onColorChanged: (newColor) => setState(() => backgroundColor = newColor));
 
   Widget buildHeader({
     required String header,
