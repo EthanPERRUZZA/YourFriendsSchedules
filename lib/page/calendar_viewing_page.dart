@@ -30,8 +30,33 @@ class CalendarViewingPage extends StatelessWidget {
               calendar.link,
               style: const TextStyle(fontSize: 18),
             ),
+            const SizedBox(height: 24),
+            buildColorView(),
           ],
         ),
+      );
+
+  Widget buildColorView() => Row(
+        children: [
+          const Expanded(
+            flex: 2,
+            child: Text(
+              "Calendar Color:",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: calendar.backgroundColor,
+              ),
+              width: 40,
+              height: 40,
+            ),
+          ),
+        ],
       );
 
   //The littles icons on the top (on for editing event, other to delete event)
