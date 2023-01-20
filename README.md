@@ -1,16 +1,11 @@
 # your_friends_schedules
 
-A new Flutter project.
+A Flutter App that help you plan activities with your friends by allowing you to see all their schedules in a single place ! 
 
-## Getting Started
+## More details 
 
-This project is a starting point for a Flutter application.
+Loads ICS calendars from ICS links (given by the app user) into one day to day calendar.
 
-A few resources to get you started if this is your first Flutter project:
+## Permission required
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Access to Internet to load the calendars.
