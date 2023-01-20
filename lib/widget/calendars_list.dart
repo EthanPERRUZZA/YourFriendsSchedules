@@ -35,7 +35,7 @@ class CalendarsListWidget extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: Theme.of(context).toggleableActiveColor),
+                    color: calendar.backgroundColor),
                 padding: const EdgeInsets.all(15.0),
                 margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
                 child: Row(
