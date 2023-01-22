@@ -36,8 +36,12 @@ class GetCalendar {
     for (String line in icsLines) {
       //if it is the end of an event, we add him
       if (line == 'END:VEVENT') {
-        eventProvider.addEvent(
-            Event(title: title, description: description, from: from, to: to));
+        eventProvider.addEvent(Event(
+            title: title,
+            description: description,
+            from: from,
+            to: to,
+            backgroundColor: calendar.backgroundColor));
         //Restoration of the fields
         title = "";
         description = "None";
