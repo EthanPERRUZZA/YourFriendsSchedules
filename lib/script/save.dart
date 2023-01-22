@@ -29,8 +29,15 @@ class Save {
     // get the directory where we can store the save infos
     Directory appDocDir = await getApplicationDocumentsDirectory();
     //load of the file
-    String jsonString =
-        await File('${appDocDir.path}/calendarICSLinks.json').readAsString();
+    String jsonString;
+    //In case the file wasn't created yet, has been compromised or deleted
+    try {
+      jsonString =
+          await File('${appDocDir.path}/calendarICSLinks.json').readAsString();
+    } catch (e) {
+      //Then we don't load anything
+      return;
+    }
     Map json = jsonDecode(jsonString);
     json.forEach((key, value) {
       eventProvider.addCalendar(Calendar(
