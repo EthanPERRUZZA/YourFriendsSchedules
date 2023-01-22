@@ -37,11 +37,13 @@ class GetCalendar {
       //if it is the end of an event, we add him
       if (line == 'END:VEVENT') {
         eventProvider.addEvent(Event(
-            title: title,
-            description: description,
-            from: from,
-            to: to,
-            backgroundColor: calendar.backgroundColor));
+          title: title,
+          description: description,
+          from: from,
+          to: to,
+          backgroundColor: calendar.backgroundColor,
+          fromXCalendar: calendar.title,
+        ));
         //Restoration of the fields
         title = "";
         description = "None";

@@ -10,11 +10,23 @@ class EventProvider extends ChangeNotifier {
   List<Event> get events => _events;
   List<Calendar> get calendars => _calendars;
 
+  //For searching efficency purpose
+  Map<String, List<Event>> _eventsBook = {};
+
   EventProvider() {
     Save.loadICSCalendars(this);
   }
 
   void addEvent(Event event) {
+    //Checks if the event is not already in the calendar (to prevent duplicate)
+    if (!(_eventsBook.containsKey(event.fromXCalendar))) {
+      _eventsBook[event.fromXCalendar] = [];
+    } else if (_eventsBook[event.fromXCalendar]!.contains(event)) {
+      return;
+    }
+    //If not then we add it and display it
+    _eventsBook[event.fromXCalendar]!.add(event);
+
     _events.add(event);
 
     notifyListeners();

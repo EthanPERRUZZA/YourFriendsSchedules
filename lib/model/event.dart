@@ -7,6 +7,7 @@ class Event {
   final DateTime to;
   final Color backgroundColor;
   final bool isAllDay;
+  final String fromXCalendar;
 
   const Event({
     required this.title,
@@ -15,5 +16,16 @@ class Event {
     required this.to,
     this.backgroundColor = Colors.lightGreen,
     this.isAllDay = false,
+    this.fromXCalendar = "__local_events",
   });
+
+  @override
+  bool operator ==(Object other) {
+    return other is Event &&
+        title == other.title &&
+        from == other.from &&
+        to == other.to &&
+        description == other.description &&
+        fromXCalendar == other.fromXCalendar;
+  }
 }
