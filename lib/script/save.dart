@@ -15,8 +15,8 @@ class Save {
     final provider = Provider.of<EventProvider>(context, listen: false);
     var json = {};
     provider.calendars.forEach((calendar) => json[calendar.title] = {
-          'link': calendar.link //,
-          //'backgroundColor': calendar.backgroundColor
+          'link': calendar.link,
+          'backgroundColor': calendar.backgroundColor.value.toString()
         });
     String jsonString = jsonEncode(json);
     File saveFile = File('${appDocDir.path}/calendarICSLinks.json');
@@ -41,8 +41,9 @@ class Save {
     Map json = jsonDecode(jsonString);
     json.forEach((key, value) {
       eventProvider.addCalendar(Calendar(
-          title: key, link: value["link"], backgroundColor: Colors.lightBlue));
-      //,backgroundColor: value["backgroundColor"]
+          title: key,
+          link: value["link"],
+          backgroundColor: Color(int.parse(value["backgroundColor"]))));
     });
     GetCalendar.refreshCalendars(eventProvider);
   }
