@@ -13,7 +13,12 @@ class GetCalendar {
 
   static fromInternetICS(EventProvider eventProvider, Calendar calendar) async {
     //request to the internet
-    final response = await http.get(Uri.parse(calendar.link));
+    final http.Response response;
+    try {
+      response = await http.get(Uri.parse(calendar.link));
+    } catch (e) {
+      return;
+    }
     //load the response in a list of strings
     //use this method to prevent problem if use \r\n or just \n
     Iterable<String> icsLines = LineSplitter.split(response.body);

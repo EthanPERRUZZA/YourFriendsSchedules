@@ -83,12 +83,49 @@ class EventProvider extends ChangeNotifier {
 
   void deleteEvent(Event event) {
     _events.remove(event);
+    _eventsBook[event.fromXCalendar]!.remove(event);
+
+    //If we are removing an event from the user's saved events
+    if (event.fromXCalendar == "__local_events") {
+      if (_eventsBook["__local_events"]!.isEmpty) {
+        //Delete the save file
+        Save.deletePersonalEventSaveFile();
+      } else {
+        //rewrite the save file
+        Save.savePersonalEvents(_eventsBook["__local_events"]!);
+      }
+    }
 
     notifyListeners();
   }
 
   void deleteCalendar(Calendar calendar) {
     _calendars.remove(calendar);
+
+    //Delete all of this Calendar events
+    int nbEventModified = 0;
+    //When all the events have been deleted we don't need to search for others
+    int i = 0;
+    while (i < _events.length &&
+        nbEventModified < _eventsBook[calendar.title]!.length) {
+      if (_events[i] == _eventsBook[calendar.title]![nbEventModified]) {
+        _events.removeAt(i);
+        nbEventModified++; //new event deleted
+        //cause event has been deleted need to stay on same index
+      } else {
+        i++; //next event
+      }
+    }
+
+    _eventsBook.remove(calendar.title);
+
+    //Deleting from the save file
+    if (_calendars.isEmpty) {
+      //Delete the save file
+      Save.deleteICSCalendarsSaveFile();
+    } else {
+      Save.saveICSCalendars(this);
+    }
 
     notifyListeners();
   }

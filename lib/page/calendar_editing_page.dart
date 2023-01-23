@@ -211,7 +211,7 @@ class _CalendarEditingPageState extends State<CalendarEditingPage> {
       Navigator.of(context).pop();
 
       // Save in the filestorage the new link
-      Save.saveICSCalendars(context);
+      Save.saveICSCalendars(provider);
     }
   }
 }

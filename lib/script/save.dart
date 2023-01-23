@@ -9,16 +9,16 @@ import 'package:your_friends_schedules/script/get_calendar.dart';
 import 'package:your_friends_schedules/model/event.dart';
 
 class Save {
-  static saveICSCalendars(BuildContext context) async {
+  static saveICSCalendars(EventProvider eventProvider) async {
     // get the directory where we can store the save infos
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    // get the provider where all calendars are stored
-    final provider = Provider.of<EventProvider>(context, listen: false);
     var json = {};
-    provider.calendars.forEach((calendar) => json[calendar.title] = {
-          'link': calendar.link,
-          'backgroundColor': calendar.backgroundColor.value.toString()
-        });
+    for (Calendar calendar in eventProvider.calendars) {
+      json[calendar.title] = {
+        'link': calendar.link,
+        'backgroundColor': calendar.backgroundColor.value.toString()
+      };
+    }
     String jsonString = jsonEncode(json);
     File saveFile = File('${appDocDir.path}/calendarICSLinks.json');
     saveFile.writeAsString(jsonString);
@@ -88,5 +88,19 @@ class Save {
           description: value["description"],
           backgroundColor: Color(int.parse(value["backgroundColor"]))));
     });
+  }
+
+  static deleteICSCalendarsSaveFile() async {
+    // get the directory where we can store the save infos
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    final file = File('${appDocDir.path}/calendarICSLinks.json');
+    await file.delete();
+  }
+
+  static deletePersonalEventSaveFile() async {
+    // get the directory where we can store the save infos
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    final file = File('${appDocDir.path}/myCalendar.json');
+    await file.delete();
   }
 }
