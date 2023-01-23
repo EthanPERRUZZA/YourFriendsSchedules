@@ -1,8 +1,6 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:your_friends_schedules/model/calendar.dart';
-import 'package:provider/src/provider.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:your_friends_schedules/model/event.dart';
 import '../provider/event_provider.dart';
 
@@ -15,16 +13,10 @@ class GetCalendar {
 
   static fromInternetICS(EventProvider eventProvider, Calendar calendar) async {
     //request to the internet
-    final request = await HttpClient().getUrl(Uri.parse(calendar.link));
-    final response = await request.close();
-    // get the directory where we can store the infos
-    // We call the directory to save the infos temporary
-    Directory appTempDir = await getTemporaryDirectory();
-    //save of the response
-    response.pipe(File('${appTempDir.path}/${calendar.title}.ics').openWrite());
-    //load of the response
-    final icsLines =
-        await File('${appTempDir.path}/${calendar.title}.ics').readAsLines();
+    final response = await http.get(Uri.parse(calendar.link));
+    //load the response in a list of strings
+    //use this method to prevent problem if use \r\n or just \n
+    Iterable<String> icsLines = LineSplitter.split(response.body);
 
     //parse of the response
     //And add each new event to the actual calendar display
@@ -35,7 +27,7 @@ class GetCalendar {
     DateTime to = DateTime(0, 0, 0, 0, 0);
     for (String line in icsLines) {
       //if it is the end of an event, we add him
-      if (line == 'END:VEVENT') {
+      if (line == "END:VEVENT") {
         eventProvider.addEvent(Event(
           title: title,
           description: description,
