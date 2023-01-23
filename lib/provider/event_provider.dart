@@ -48,6 +48,30 @@ class EventProvider extends ChangeNotifier {
   void editCalendar(Calendar newCalendar, Calendar oldCalendar) {
     final index = _calendars.indexOf(oldCalendar);
     _calendars[index] = newCalendar;
+    _eventsBook[newCalendar.title] = _eventsBook[oldCalendar.title]!;
+    if (newCalendar.title != oldCalendar.title) {
+      _eventsBook.remove(oldCalendar.title);
+    }
+
+    //Update all of this Calendar events
+    int nbEventModified = 0;
+    //When all the events have been modified we don't need to search for other
+    //event from this calendar so we stop the loop
+    for (int i = 0;
+        i < _events.length &&
+            nbEventModified < _eventsBook[newCalendar.title]!.length;
+        i++) {
+      if (_events[i].fromXCalendar == oldCalendar.title) {
+        _events[i] = Event(
+            title: _events[i].title,
+            description: _events[i].description,
+            from: _events[i].from,
+            to: _events[i].to,
+            backgroundColor: newCalendar.backgroundColor,
+            fromXCalendar: newCalendar.title);
+        nbEventModified++;
+      }
+    }
 
     notifyListeners();
   }
