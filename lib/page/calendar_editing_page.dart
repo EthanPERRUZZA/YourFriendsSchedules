@@ -3,7 +3,6 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/src/provider.dart';
 import 'package:your_friends_schedules/script/save.dart';
 import '../model/calendar.dart';
-import '../utils.dart';
 import '../provider/event_provider.dart';
 
 class CalendarEditingPage extends StatefulWidget {

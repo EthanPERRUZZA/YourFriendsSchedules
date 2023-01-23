@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../model/event.dart';
 import '../utils.dart';
 import '../provider/event_provider.dart';
@@ -21,6 +22,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
   final titleController = TextEditingController();
   late DateTime fromDate;
   late DateTime toDate;
+  Color backgroundColor = Colors.white;
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
       titleController.text = event.title;
       fromDate = event.from;
       toDate = event.to;
+      backgroundColor = event.backgroundColor;
     }
   }
 
@@ -62,10 +65,80 @@ class _EventEditingPageState extends State<EventEditingPage> {
               buildTitle(),
               const SizedBox(height: 12),
               buildDateTimePickers(),
+              const SizedBox(height: 25),
+              buildColorPickerField(),
             ],
           ),
         ),
       ));
+
+  Widget buildColorPickerField() => Row(
+        children: [
+          const Expanded(
+            flex: 2,
+            child: Text(
+              "Event Color:",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () => pickColor(context),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: backgroundColor,
+                ),
+                width: 40,
+                height: 40,
+              ),
+            ),
+          )
+        ],
+      );
+
+  void pickColor(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Text("Pick Your Color"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildColorPicker(),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('SELECT', style: TextStyle(fontSize: 20)),
+                ),
+              ],
+            ),
+          ));
+
+  Widget buildColorPicker() => BlockPicker(
+      pickerColor: backgroundColor,
+      availableColors: const [
+        Colors.red,
+        Colors.pink,
+        Colors.purple,
+        Colors.deepPurple,
+        Colors.indigo,
+        Colors.blue,
+        Colors.lightBlue,
+        Colors.cyan,
+        Colors.teal,
+        Colors.green,
+        Colors.lightGreen,
+        Colors.lime,
+        Colors.yellow,
+        Colors.amber,
+        Colors.orange,
+        Colors.deepOrange,
+        Colors.brown,
+        Colors.grey,
+        Colors.blueGrey,
+        Colors.black,
+      ],
+      onColorChanged: (newColor) => setState(() => backgroundColor = newColor));
 
   List<Widget> buildEditingActions() => [
         ElevatedButton.icon(
@@ -247,6 +320,7 @@ class _EventEditingPageState extends State<EventEditingPage> {
         from: fromDate,
         to: toDate,
         isAllDay: false,
+        backgroundColor: backgroundColor,
       );
 
       final isEditing = widget.event != null;

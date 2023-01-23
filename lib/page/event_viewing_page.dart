@@ -33,8 +33,33 @@ class EventViewingPage extends StatelessWidget {
               event.description,
               style: const TextStyle(fontSize: 18),
             ),
+            const SizedBox(height: 24),
+            buildColorView(),
           ],
         ),
+      );
+
+  Widget buildColorView() => Row(
+        children: [
+          const Expanded(
+            flex: 2,
+            child: Text(
+              "Event Color:",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: event.backgroundColor,
+              ),
+              width: 40,
+              height: 40,
+            ),
+          ),
+        ],
       );
 
   Widget buildDateTime(Event event) {
