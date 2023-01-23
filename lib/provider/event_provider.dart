@@ -15,6 +15,7 @@ class EventProvider extends ChangeNotifier {
 
   EventProvider() {
     Save.loadICSCalendars(this);
+    Save.loadPersonalEvents(this);
   }
 
   void addEvent(Event event) {
@@ -26,6 +27,10 @@ class EventProvider extends ChangeNotifier {
     }
     //If not then we add it and display it
     _eventsBook[event.fromXCalendar]!.add(event);
+
+    if (event.fromXCalendar == "__local_events") {
+      Save.savePersonalEvents(_eventsBook["__local_events"]!);
+    }
 
     _events.add(event);
 
