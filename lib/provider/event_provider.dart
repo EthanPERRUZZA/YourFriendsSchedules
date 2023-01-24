@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:your_friends_schedules/model/event.dart';
 import 'package:your_friends_schedules/model/calendar.dart';
+import 'package:your_friends_schedules/script/get_calendar.dart';
 import 'package:your_friends_schedules/script/save.dart';
 
 class EventProvider extends ChangeNotifier {
@@ -11,7 +12,7 @@ class EventProvider extends ChangeNotifier {
   List<Calendar> get calendars => _calendars;
 
   //For searching efficency purpose
-  Map<String, List<Event>> _eventsBook = {};
+  final Map<String, List<Event>> _eventsBook = {};
 
   EventProvider() {
     Save.loadICSCalendars(this);
@@ -39,8 +40,10 @@ class EventProvider extends ChangeNotifier {
 
   void addCalendar(Calendar calendar) {
     _calendars.add(calendar);
-
     notifyListeners();
+
+    //Loads the event from the new calendar
+    GetCalendar.fromInternetICS(this, calendar);
   }
 
   void editEvent(Event newEvent, Event oldEvent) {
@@ -53,28 +56,43 @@ class EventProvider extends ChangeNotifier {
   void editCalendar(Calendar newCalendar, Calendar oldCalendar) {
     final index = _calendars.indexOf(oldCalendar);
     _calendars[index] = newCalendar;
+
+    if (_eventsBook[oldCalendar.title] == null) {
+      addCalendar(newCalendar);
+      _calendars.removeAt(index);
+      return;
+    }
+
     _eventsBook[newCalendar.title] = _eventsBook[oldCalendar.title]!;
     if (newCalendar.title != oldCalendar.title) {
       _eventsBook.remove(oldCalendar.title);
     }
 
-    //Update all of this Calendar events
-    int nbEventModified = 0;
-    //When all the events have been modified we don't need to search for other
-    //event from this calendar so we stop the loop
-    for (int i = 0;
-        i < _events.length &&
-            nbEventModified < _eventsBook[newCalendar.title]!.length;
-        i++) {
-      if (_events[i].fromXCalendar == oldCalendar.title) {
-        _events[i] = Event(
-            title: _events[i].title,
-            description: _events[i].description,
-            from: _events[i].from,
-            to: _events[i].to,
-            backgroundColor: newCalendar.backgroundColor,
-            fromXCalendar: newCalendar.title);
-        nbEventModified++;
+    if (newCalendar.link != oldCalendar.link) {
+      //If links have changed then got to change everything
+      _calendars.removeAt(index);
+      deleteCalendar(oldCalendar);
+      addCalendar(newCalendar);
+    } else {
+      //Then only a change color or calendar name
+      //Update all of this Calendar events
+      int nbEventModified = 0;
+      //When all the events have been modified we don't need to search for other
+      //event from this calendar so we stop the loop
+      for (int i = 0;
+          i < _events.length &&
+              nbEventModified < _eventsBook[newCalendar.title]!.length;
+          i++) {
+        if (_events[i].fromXCalendar == oldCalendar.title) {
+          _events[i] = Event(
+              title: _events[i].title,
+              description: _events[i].description,
+              from: _events[i].from,
+              to: _events[i].to,
+              backgroundColor: newCalendar.backgroundColor,
+              fromXCalendar: newCalendar.title);
+          nbEventModified++;
+        }
       }
     }
 
